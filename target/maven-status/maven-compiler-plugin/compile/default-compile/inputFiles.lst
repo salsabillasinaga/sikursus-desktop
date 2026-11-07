@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\ASUS\OneDrive\Documents\SALSABILLA SINAGA\src\main\java\view\FormPendaftaranAwal.java
 C:\Users\ASUS\OneDrive\Documents\SALSABILLA SINAGA\src\main\java\app\UjiValidasi.java
 C:\Users\ASUS\OneDrive\Documents\SALSABILLA SINAGA\src\main\java\config\TestDatabase.java
@@ -18,3 +19,21 @@ C:\Users\ASUS\OneDrive\Documents\SALSABILLA SINAGA\src\main\java\model\Kursus.ja
 C:\Users\ASUS\OneDrive\Documents\SALSABILLA SINAGA\src\main\java\view\txtHasil.java
 C:\Users\ASUS\OneDrive\Documents\SALSABILLA SINAGA\src\main\java\id\ac\uinbukittinggi\sikursus\desktop\main.java
 C:\Users\ASUS\OneDrive\Documents\SALSABILLA SINAGA\src\main\java\app\DemoInheritance.java
+=======
+D:\sikursus-desktop-main\src\main\java\app\DemoInheritance.java
+D:\sikursus-desktop-main\src\main\java\app\DemoKursus.java
+D:\sikursus-desktop-main\src\main\java\app\DemoPolymorphism.java
+D:\sikursus-desktop-main\src\main\java\app\UjiPraktikum7.java
+D:\sikursus-desktop-main\src\main\java\app\UjiValidasi.java
+D:\sikursus-desktop-main\src\main\java\id\ac\uinbukittinggi\sikursus\desktop\main.java
+D:\sikursus-desktop-main\src\main\java\latihan\LatihanBiayaKursus.java
+D:\sikursus-desktop-main\src\main\java\latihan\LuasdanKelilingBidangDatar.java
+D:\sikursus-desktop-main\src\main\java\Model\Admin.java
+D:\sikursus-desktop-main\src\main\java\Model\Instruktur.java
+D:\sikursus-desktop-main\src\main\java\Model\Kursus.java
+D:\sikursus-desktop-main\src\main\java\Model\Orang.java
+D:\sikursus-desktop-main\src\main\java\Model\Peserta.java
+D:\sikursus-desktop-main\src\main\java\view\FormPendaftaranAwal.java
+D:\sikursus-desktop-main\src\main\java\view\FormPendaftaranKursus.java
+D:\sikursus-desktop-main\src\main\java\view\txthasil.java
+>>>>>>> 860bd6ca43fd25bfddf45a59f5d1b8aee3c6450d

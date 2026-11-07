@@ -1,6 +1,7 @@
 app\UjiValidasi$5.class
 view\FormPendaftaranAwal$3.class
 latihan\LatihanBiayaKursus.class
+<<<<<<< HEAD
 dao\PesertaDAO.class
 view\FormPendaftaranKursus$6.class
 app\UjiValidasi$7.class
@@ -12,18 +13,32 @@ app\UjiValidasi$3.class
 app\UjiValidasi$8.class
 app\UjiValidasi$2.class
 view\FormPendaftaranKursus$8.class
+=======
+app\UjiValidasi$7.class
+view\FormPendaftaranAwal$1.class
+app\DemoPolymorphism.class
+app\UjiValidasi$3.class
+app\UjiValidasi$8.class
+app\UjiValidasi$2.class
+>>>>>>> 860bd6ca43fd25bfddf45a59f5d1b8aee3c6450d
 app\DemoKursus.class
 model\Instruktur.class
 view\FormPendaftaranAwal$2.class
 view\FormPendaftaranAwal.class
 id\ac\uinbukittinggi\sikursus\desktop\main.class
+<<<<<<< HEAD
 view\FormPendaftaranKursus$3.class
+=======
+>>>>>>> 860bd6ca43fd25bfddf45a59f5d1b8aee3c6450d
 app\UjiValidasi$6.class
 view\FormPendaftaranAwal$4.class
 app\UjiValidasi$4.class
 app\UjiPraktikum7.class
+<<<<<<< HEAD
 latihan\LatihanBidangDatar.class
 view\FormPendaftaranKursus$5.class
+=======
+>>>>>>> 860bd6ca43fd25bfddf45a59f5d1b8aee3c6450d
 model\Orang.class
 app\UjiValidasi$Aksi.class
 view\FormPendaftaranKursus.class
@@ -32,6 +47,7 @@ model\Kursus.class
 app\UjiValidasi$9.class
 view\txtHasil.class
 model\Peserta.class
+<<<<<<< HEAD
 view\FormPendaftaranKursus$4.class
 view\FormPendaftaranKursus$2.class
 view\PesertaFrame.class
@@ -40,4 +56,9 @@ view\PesertaFrame$1.class
 view\FormPendaftaranKursus$7.class
 app\UjiValidasi$1.class
 config\Database.class
+=======
+latihan\LuasdanKelilingBidangDatar.class
+app\UjiValidasi.class
+app\UjiValidasi$1.class
+>>>>>>> 860bd6ca43fd25bfddf45a59f5d1b8aee3c6450d
 model\Admin.class
