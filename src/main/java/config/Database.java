@@ -1,4 +1,3 @@
-
 package config;
 
 import java.sql.Connection;
@@ -11,13 +10,14 @@ public class Database {
             "jdbc:mysql://localhost:3306/db_sikursus1";
 
     private static final String USER = "root";
-
-    private static final String PASS = "";
-
-    private Database() {
-    }
+    private static final String PASSWORD = "";
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+
+        return DriverManager.getConnection(
+            URL,
+            USER,
+            PASSWORD
+        );
     }
 }
