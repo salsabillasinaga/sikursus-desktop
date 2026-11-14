@@ -1,4 +1,5 @@
 app\UjiValidasi$5.class
+view\UserFrame$3.class
 view\KursusFrame.class
 latihan\LatihanBiayaKursus.class
 dao\PesertaDAO.class
@@ -22,11 +23,13 @@ id\ac\uinbukittinggi\sikursus\desktop\main.class
 view\DashboardFrame$1.class
 model\User.class
 util\Theme$RoundButtonUI.class
+view\LoginFrame$1.class
 app\UjiValidasi$6.class
 view\FormPendaftaranAwal$4.class
 app\UjiPraktikum7.class
 view\FormPendaftaranKursus$5.class
 model\Orang.class
+view\UserFrame.class
 util\PasswordUtil.class
 app\UjiValidasi$Aksi.class
 util\WindowManager$1.class
@@ -34,6 +37,7 @@ view\FormPendaftaranKursus.class
 view\InstrukturFrame$1.class
 model\Kursus.class
 app\UjiValidasi$9.class
+util\Theme$ScaledIcon.class
 view\FormPendaftaranKursus$2.class
 view\PesertaFrame$1.class
 view\LoginFrame.class
@@ -48,6 +52,7 @@ config\TestDatabase.class
 app\UjiValidasi$3.class
 view\FormPendaftaranAwal.class
 view\InstrukturFrame.class
+view\UserFrame$2.class
 view\FormPendaftaranKursus$3.class
 util\Theme$1.class
 dao\KelasDAO.class
@@ -64,6 +69,7 @@ model\Peserta.class
 view\FormPendaftaranKursus$4.class
 view\PesertaFrame.class
 app\UjiValidasi.class
+view\UserFrame$1.class
 view\FormPendaftaranKursus$7.class
 app\UjiValidasi$1.class
 config\Database.class

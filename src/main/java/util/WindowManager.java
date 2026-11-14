@@ -1,51 +1,57 @@
 package util;
 
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
-public class WindowManager {
+public final class WindowManager {
+    private static final Map<Class<? extends JFrame>, JFrame> WINDOWS
+            = new HashMap<>();
 
-    private static final Map<String, JFrame> windows =
-            new HashMap<String, JFrame>();
+    private WindowManager() {}
 
-    public static void open(
-            String key, Supplier<? extends JFrame> supplier) {
+    public static synchronized <T extends JFrame> void open(
+            Class<T> type,
+            Supplier<T> factory) {
 
-        JFrame frame = windows.get(key);
+        JFrame frame = WINDOWS.get(type);
 
-        if (frame != null && frame.isDisplayable()) {
-            frame.setVisible(true);
-            frame.toFront();
-            frame.requestFocus();
-            return;
+        if (frame == null || !frame.isDisplayable()) {
+            frame = factory.get();
+            frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+            JFrame trackedFrame = frame;
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    synchronized (WindowManager.class) {
+                        WINDOWS.remove(type, trackedFrame);
+                    }
+                }
+            });
+
+            WINDOWS.put(type, frame);
         }
 
-        frame = supplier.get();
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        if ((frame.getExtendedState() & Frame.ICONIFIED) == Frame.ICONIFIED) {
+            frame.setExtendedState(Frame.NORMAL);
+        }
 
-        final String windowKey = key;
-
-        frame.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                windows.remove(windowKey);
-            }
-        });
-
-        windows.put(key, frame);
-        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.toFront();
+        frame.requestFocus();
     }
 
-    public static void closeAll() {
-        for (JFrame frame : windows.values()) {
-            if (frame != null) {
-                frame.dispose();
-            }
+    public static synchronized void closeAll() {
+        for (JFrame frame : new ArrayList<>(WINDOWS.values())) {
+            frame.dispose();
         }
-
-        windows.clear();
+        WINDOWS.clear();
     }
 }

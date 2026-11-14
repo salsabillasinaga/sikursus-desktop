@@ -23,21 +23,21 @@ public class KursusFrame extends JFrame {
         setTitle("SIKURSUS - Data Kursus");
         setSize(950, 650);
         Theme.styleFrame(this);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         initComponents();
         tampilData("");
     }
 
     private void initComponents() {
-
-        // ---------- FORM ----------
-        JPanel form = Theme.createCard(new GridBagLayout(), "FORM KURSUS");
+        JPanel form = Theme.createCard(
+                new GridBagLayout(), "FORM KURSUS");
 
         txtKode = new JTextField();
         txtNama = new JTextField();
         txtBiaya = new JTextField();
-        cmbLevel = new JComboBox<String>(
-            new String[]{"BASIC", "INTERMEDIATE", "ADVANCED"}
-        );
+
+        cmbLevel = new JComboBox<>(
+                new String[]{"BASIC", "INTERMEDIATE", "ADVANCED"});
 
         Theme.addField(form, 0, 0, "Kode Kursus", txtKode);
         Theme.addField(form, 0, 1, "Nama Kursus", txtNama);
@@ -49,19 +49,21 @@ public class KursusFrame extends JFrame {
         JButton btnHapus = Theme.createButton("Hapus", Theme.BTN_DELETE);
         JButton btnReset = Theme.createButton("Reset", Theme.BTN_NEUTRAL);
 
-        Theme.addButtonRow(form, 2, 4, btnSimpan, btnUbah, btnHapus, btnReset);
+        Theme.addButtonRow(form, 2, 4,
+                btnSimpan, btnUbah, btnHapus, btnReset);
 
-        // ---------- TABEL ----------
         JPanel tablePanel = Theme.createCard(
-            new BorderLayout(0, 10), "DAFTAR KURSUS");
+                new BorderLayout(0, 12), "DATA KURSUS");
 
         txtCari = new JTextField();
+        txtCari.setToolTipText("Cari kode, nama, atau level kursus");
+
         JButton btnCari = Theme.createButton("Cari", Theme.BTN_EDIT);
-        JButton btnSemua = Theme.createButton("Tampilkan Semua", Theme.BTN_NEUTRAL);
 
         model = new DefaultTableModel(
-            new String[]{"ID", "Kode", "Nama Kursus", "Level", "Biaya (Rp)"}, 0
-        ) {
+                new String[]{
+                    "ID", "Kode", "Nama Kursus", "Level", "Biaya (Rp)"
+                }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -70,85 +72,101 @@ public class KursusFrame extends JFrame {
 
         tabel = new JTable(model);
         Theme.styleTable(tabel);
+        tabel.setAutoCreateRowSorter(true);
         Theme.fixedWidth(tabel, 0, 50);
 
-        // Format rupiah (hanya tampilan, data asli tetap angka)
-        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("id", "ID"));
+        NumberFormat nf = NumberFormat.getNumberInstance(
+                new Locale("id", "ID"));
+
         tabel.getColumnModel().getColumn(4).setCellRenderer(
-            new Theme.TableRenderer(SwingConstants.RIGHT, v ->
-                (v instanceof Number)
-                    ? "Rp " + nf.format(((Number) v).doubleValue())
-                    : v.toString())
+                new Theme.TableRenderer(
+                        SwingConstants.RIGHT,
+                        v -> v instanceof Number
+                                ? "Rp " + nf.format(
+                                        ((Number) v).doubleValue())
+                                : Theme.str(v)
+                )
         );
 
-        tablePanel.add(Theme.createSearchBar(txtCari, btnCari, btnSemua),
+        tablePanel.add(
+                Theme.createSearchBar(txtCari, btnCari),
                 BorderLayout.NORTH);
         tablePanel.add(Theme.createScroll(tabel), BorderLayout.CENTER);
 
         setContentPane(Theme.createPage(
-            "DATA KURSUS",
-            "Kelola program dan biaya kursus",
-            form, tablePanel
-        ));
+                "DATA KURSUS",
+                "Kelola program dan biaya kursus",
+                form, tablePanel));
 
-        // ---------- EVENT ----------
         btnSimpan.addActionListener(e -> simpan());
         btnUbah.addActionListener(e -> ubah());
         btnHapus.addActionListener(e -> hapus());
         btnReset.addActionListener(e -> reset());
-        btnCari.addActionListener(e -> tampilData(txtCari.getText().trim()));
-        txtCari.addActionListener(e -> tampilData(txtCari.getText().trim()));
-        btnSemua.addActionListener(e -> {
-            txtCari.setText("");
-            tampilData("");
-        });
+
+        btnCari.addActionListener(e ->
+                tampilData(txtCari.getText().trim()));
+        txtCari.addActionListener(e ->
+                tampilData(txtCari.getText().trim()));
 
         tabel.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && tabel.getSelectedRow() >= 0) {
-                int row = tabel.getSelectedRow();
-
-                idTerpilih = Integer.parseInt(model.getValueAt(row, 0).toString());
-                txtKode.setText(Theme.str(model.getValueAt(row, 1)));
-                txtNama.setText(Theme.str(model.getValueAt(row, 2)));
-                cmbLevel.setSelectedItem(Theme.str(model.getValueAt(row, 3)));
-                txtBiaya.setText(Theme.str(model.getValueAt(row, 4)));
+            if (!e.getValueIsAdjusting()
+                    && tabel.getSelectedRow() >= 0) {
+                pilihData();
             }
         });
     }
 
     private void tampilData(String keyword) {
         model.setRowCount(0);
+
         List<Object[]> data = dao.getAll(keyword);
+
         for (Object[] row : data) {
             model.addRow(row);
         }
+    }
+
+    private void pilihData() {
+        int row = tabel.getSelectedRow();
+        if (row < 0) return;
+
+        row = tabel.convertRowIndexToModel(row);
+
+        idTerpilih = Integer.parseInt(
+                model.getValueAt(row, 0).toString());
+
+        txtKode.setText(Theme.str(model.getValueAt(row, 1)));
+        txtNama.setText(Theme.str(model.getValueAt(row, 2)));
+        cmbLevel.setSelectedItem(
+                Theme.str(model.getValueAt(row, 3)));
+        txtBiaya.setText(Theme.str(model.getValueAt(row, 4)));
     }
 
     private boolean validasi() {
         if (txtKode.getText().trim().isEmpty()
                 || txtNama.getText().trim().isEmpty()
                 || txtBiaya.getText().trim().isEmpty()) {
-
-            JOptionPane.showMessageDialog(this,
-                "Semua data kursus wajib diisi.",
-                "Validasi", JOptionPane.WARNING_MESSAGE);
+            Theme.showMessage(this,
+                    "Semua data kursus wajib diisi.",
+                    "Validasi", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         try {
-            double biaya = Double.parseDouble(txtBiaya.getText().trim());
+            double biaya = Double.parseDouble(
+                    txtBiaya.getText().trim());
 
             if (biaya < 0) {
-                JOptionPane.showMessageDialog(this,
-                    "Biaya tidak boleh negatif.",
-                    "Validasi", JOptionPane.WARNING_MESSAGE);
+                Theme.showMessage(this,
+                        "Biaya tidak boleh negatif.",
+                        "Validasi", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                "Biaya harus berupa angka.",
-                "Validasi", JOptionPane.WARNING_MESSAGE);
+            Theme.showMessage(this,
+                    "Biaya harus berupa angka.",
+                    "Validasi", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
@@ -159,69 +177,74 @@ public class KursusFrame extends JFrame {
         if (!validasi()) return;
 
         boolean sukses = dao.insert(
-            txtKode.getText().trim(),
-            txtNama.getText().trim(),
-            cmbLevel.getSelectedItem().toString(),
-            Double.parseDouble(txtBiaya.getText().trim())
-        );
+                txtKode.getText().trim(),
+                txtNama.getText().trim(),
+                cmbLevel.getSelectedItem().toString(),
+                Double.parseDouble(txtBiaya.getText().trim()));
 
         if (sukses) {
-            JOptionPane.showMessageDialog(this, "Data kursus berhasil disimpan.");
+            Theme.showMessage(this,
+                    "Data kursus berhasil disimpan.",
+                    "Berhasil", JOptionPane.INFORMATION_MESSAGE);
             reset();
-            tampilData("");
         } else {
-            JOptionPane.showMessageDialog(this,
-                "Gagal menyimpan. Periksa apakah kode kursus sudah digunakan.",
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Theme.showMessage(this,
+                    "Gagal menyimpan. Periksa apakah kode kursus sudah digunakan.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void ubah() {
         if (idTerpilih == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih data yang ingin diubah.");
+            Theme.showMessage(this,
+                    "Pilih data yang ingin diubah.",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
         if (!validasi()) return;
 
         boolean sukses = dao.update(
-            idTerpilih,
-            txtKode.getText().trim(),
-            txtNama.getText().trim(),
-            cmbLevel.getSelectedItem().toString(),
-            Double.parseDouble(txtBiaya.getText().trim())
-        );
+                idTerpilih,
+                txtKode.getText().trim(),
+                txtNama.getText().trim(),
+                cmbLevel.getSelectedItem().toString(),
+                Double.parseDouble(txtBiaya.getText().trim()));
 
         if (sukses) {
-            JOptionPane.showMessageDialog(this, "Data kursus berhasil diubah.");
+            Theme.showMessage(this,
+                    "Data kursus berhasil diubah.",
+                    "Berhasil", JOptionPane.INFORMATION_MESSAGE);
             reset();
-            tampilData("");
         } else {
-            JOptionPane.showMessageDialog(this,
-                "Gagal mengubah data kursus.",
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Theme.showMessage(this,
+                    "Gagal mengubah data kursus.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void hapus() {
         if (idTerpilih == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus.");
+            Theme.showMessage(this,
+                    "Pilih data yang ingin dihapus.",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        int konfirmasi = JOptionPane.showConfirmDialog(
-            this, "Hapus data kursus ini?",
-            "Konfirmasi", JOptionPane.YES_NO_OPTION
-        );
+        int konfirmasi = Theme.showConfirm(
+                this, "Hapus data kursus ini?",
+                "Konfirmasi Hapus");
 
         if (konfirmasi == JOptionPane.YES_OPTION) {
             if (dao.delete(idTerpilih)) {
-                JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
+                Theme.showMessage(this,
+                        "Data berhasil dihapus.",
+                        "Berhasil", JOptionPane.INFORMATION_MESSAGE);
                 reset();
-                tampilData("");
             } else {
-                JOptionPane.showMessageDialog(this,
-                    "Data gagal dihapus karena mungkin masih digunakan oleh kelas.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                Theme.showMessage(this,
+                        "Data gagal dihapus karena mungkin masih digunakan oleh kelas.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -229,10 +252,15 @@ public class KursusFrame extends JFrame {
     private void reset() {
         idTerpilih = -1;
         tabel.clearSelection();
+
         txtKode.setText("");
         txtNama.setText("");
         txtBiaya.setText("");
+        txtCari.setText("");
+
         cmbLevel.setSelectedIndex(0);
+
+        tampilData("");
         txtKode.requestFocus();
     }
 }

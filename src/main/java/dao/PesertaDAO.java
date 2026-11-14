@@ -1,4 +1,3 @@
-
 package dao;
 
 import config.Database;
@@ -95,6 +94,7 @@ public class PesertaDAO {
                 + "jenis_kelamin, prodi, no_hp, email "
                 + "FROM peserta "
                 + "WHERE nim LIKE ? OR nama LIKE ? OR prodi LIKE ? "
+                + "OR no_hp LIKE ? OR email LIKE ? "
                 + "ORDER BY id_peserta DESC";
 
         try (Connection c = Database.getConnection();
@@ -106,6 +106,8 @@ public class PesertaDAO {
             ps.setString(1, cari);
             ps.setString(2, cari);
             ps.setString(3, cari);
+            ps.setString(4, cari);
+            ps.setString(5, cari);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

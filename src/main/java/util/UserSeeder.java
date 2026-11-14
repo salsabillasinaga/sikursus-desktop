@@ -1,41 +1,45 @@
 package util;
 
-import dao.UserDAO;
+import config.Database;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Arrays;
 
-public class UserSeeder {
+/**
+ * Jalankan sekali (klik kanan > Run File) untuk membuat akun demo.
+ * Jika tabel users masih berisi akun lama dengan format hash berbeda,
+ * kosongkan dulu:  DELETE FROM users;
+ */
+public final class UserSeeder {
+    private UserSeeder() {}
 
     public static void main(String[] args) {
-
-        UserDAO dao = new UserDAO();
-
-        if (!dao.usernameExists("admin")) {
-            boolean admin = dao.insertUser(
-                "admin",
-                "Admin@123",
-                "ADMIN"
-            );
-
-            System.out.println(
-                admin ? "Akun admin berhasil dibuat."
-                      : "Akun admin gagal dibuat."
-            );
-        } else {
-            System.out.println("Akun admin sudah tersedia.");
+        try {
+            seed("admin", "Admin@123".toCharArray(), "ADMIN");
+            seed("operator", "Operator@123".toCharArray(), "OPERATOR");
+            System.out.println("User demo siap. Jalankan aplikasi lalu login.");
+        } catch (SQLException ex) {
+            System.err.println("Gagal membuat user demo: " + ex.getMessage());
         }
+    }
 
-        if (!dao.usernameExists("operator")) {
-            boolean operator = dao.insertUser(
-                "operator",
-                "Operator@123",
-                "OPERATOR"
-            );
+    private static void seed(String username, char[] password, String role)
+            throws SQLException {
 
-            System.out.println(
-                operator ? "Akun operator berhasil dibuat."
-                         : "Akun operator gagal dibuat."
-            );
-        } else {
-            System.out.println("Akun operator sudah tersedia.");
+        String sql = "INSERT IGNORE INTO users"
+                + "(username,password_hash,role,aktif) VALUES (?,?,?,1)";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ps.setString(2, PasswordUtil.hash(password));
+            ps.setString(3, role);
+            ps.executeUpdate();
+
+        } finally {
+            Arrays.fill(password, '\0');
         }
     }
 }
