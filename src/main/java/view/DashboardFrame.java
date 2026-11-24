@@ -28,7 +28,8 @@ public class DashboardFrame extends JFrame {
     private JMenu menuMaster, menuTransaksi, menuLaporan, menuKeluar;
     private JMenuItem miPeserta, miInstruktur, miKursus, miKelas, miUser;
     private JMenuItem miPendaftaran, miPembayaran;
-    private JMenuItem miLaporanPeserta, miLaporanPendaftaran;
+    private JMenuItem miLaporanPeserta, miLaporanPendaftaran,
+            miLaporanPembayaran;
     private JMenuItem miLogout, miTutup;
 
     private User currentUser;
@@ -218,6 +219,7 @@ public class DashboardFrame extends JFrame {
 
         miLaporanPeserta = new JMenuItem("Laporan Peserta");
         miLaporanPendaftaran = new JMenuItem("Laporan Pendaftaran");
+        miLaporanPembayaran = new JMenuItem("Laporan Pembayaran");
 
         miLogout = new JMenuItem("Logout");
         miTutup = new JMenuItem("Tutup Aplikasi");
@@ -244,6 +246,7 @@ public class DashboardFrame extends JFrame {
 
         menuLaporan.add(miLaporanPeserta);
         menuLaporan.add(miLaporanPendaftaran);
+        menuLaporan.add(miLaporanPembayaran);
 
         menuKeluar.add(miLogout);
         menuKeluar.addSeparator();
@@ -262,13 +265,17 @@ public class DashboardFrame extends JFrame {
         miUser.addActionListener(e -> openUser());
 
         miPendaftaran.addActionListener(e ->
-                showUnderDevelopment("Modul Pendaftaran"));
+                WindowManager.open(PendaftaranFrame.class, PendaftaranFrame::new));
         miPembayaran.addActionListener(e ->
-                showUnderDevelopment("Modul Pembayaran"));
+                WindowManager.open(PembayaranFrame.class, PembayaranFrame::new));
 
         miLaporanPeserta.addActionListener(e ->
                 report.ReportService.tampilkanLaporanPeserta());
-        miLaporanPendaftaran.addActionListener(e -> showReportPlaceholder());
+        // Pilih baris pendaftaran di tabel, lalu klik Cetak Terpilih
+        miLaporanPendaftaran.addActionListener(e ->
+                WindowManager.open(PendaftaranFrame.class, PendaftaranFrame::new));
+        miLaporanPembayaran.addActionListener(e ->
+                WindowManager.open(LaporanPembayaranFrame.class, LaporanPembayaranFrame::new));
 
         miLogout.addActionListener(e -> logout());
         miTutup.addActionListener(e -> closeApplication());
