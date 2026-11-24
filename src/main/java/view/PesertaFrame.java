@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import model.Peserta;
+import report.ReportService;
 import util.Theme;
 
 public class PesertaFrame extends JFrame {
@@ -71,7 +72,7 @@ public class PesertaFrame extends JFrame {
         JButton btnReset = Theme.createButton(
                 "Reset", Theme.BTN_NEUTRAL);
         JButton btnCetak = Theme.createButton(
-                "Cetak Semua", Theme.BTN_SUCCESS);
+                "Cetak", Theme.BTN_SUCCESS);
 
         Theme.addButtonRow(panel, 3, 5,
                 btnSimpan, btnUbah, btnHapus,
@@ -337,18 +338,8 @@ public class PesertaFrame extends JFrame {
     }
 
     private void printData() {
-        try {
-            if (tblPeserta.print()) {
-                Theme.showMessage(this,
-                        "Data peserta berhasil dicetak!",
-                        "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-        } catch (Exception ex) {
-            Theme.showMessage(this,
-                    "Gagal mencetak data: " + ex.getMessage(),
-                    "Cetak Data", JOptionPane.ERROR_MESSAGE);
-        }
+        // Praktikum 12: laporan Jasper (JasperViewer)
+        ReportService.tampilkanLaporanPeserta();
     }
 
     private void showValidationError(IllegalArgumentException ex) {

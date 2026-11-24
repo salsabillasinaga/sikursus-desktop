@@ -266,7 +266,8 @@ public class DashboardFrame extends JFrame {
         miPembayaran.addActionListener(e ->
                 showUnderDevelopment("Modul Pembayaran"));
 
-        miLaporanPeserta.addActionListener(e -> showReportPlaceholder());
+        miLaporanPeserta.addActionListener(e ->
+                report.ReportService.tampilkanLaporanPeserta());
         miLaporanPendaftaran.addActionListener(e -> showReportPlaceholder());
 
         miLogout.addActionListener(e -> logout());
